@@ -28,12 +28,30 @@ RUN set -x \
 
 RUN set -x \
   && rm /usr/share/nginx/html/build/images/aws/* \
-  && cd /tmp \
+  && mkdir /tmp/aws \
+  && cd /tmp/aws \
   && curl -o aws.zip -sSL https://d1.awsstatic.com/webteam/architecture-icons/q1-2021/AWS-Architecture_Asset-Package_20210131.a41ffeeec67743738315c2585f5fdb6f3c31238d.zip \
   && unzip aws.zip \
-  && cd Asset-Package_20210131 \
-  && unzip Architecture-Service-Icons_01-31-2021.zip \
-  && find . -type f -name '*.svg' | grep -v __MACOSX | xargs -i cp {} /usr/share/nginx/html/build/images/aws
+  && unzip Asset-Package_20210131/Architecture-Service-Icons_01-31-2021.zip \
+  && unzip Asset-Package_20210131/Category-Icons_01-31-2021.zip \
+  && unzip Asset-Package_20210131/Resource-Icons_01-31-2021.zip \
+  && find . -type d -name '__MACOSX' | xargs rm -rf \
+  && find . -type f -name '*.svg' | xargs -i cp {} /usr/share/nginx/html/build/images/aws \
+  && chmod 644 -R /usr/share/nginx/html/build/images/aws \
+  && chmod +x /usr/share/nginx/html/build/images/aws \
+  && cd / && rm -rf /tmp/aws
+
+RUN set -x \
+  && mkdir -p /usr/share/nginx/html/build/images/google \
+  && mkdir /tmp/google \
+  && cd /tmp/google \
+  && curl -o gcp.zip -sSL https://cloud.google.com/icons/files/google-cloud-icons.zip \
+  && unzip gcp.zip \
+  && find . -type d -name '__MACOSX' | xargs rm -rf \
+  && find . -type f -name '*.svg' | xargs -i cp {} /usr/share/nginx/html/build/images/google \
+  && chmod 644 -R /usr/share/nginx/html/build/images/google \
+  && chmod +x /usr/share/nginx/html/build/images/google \
+  && cd / && rm -rf /tmp/google
 
 WORKDIR /usr/share/nginx/html
 
